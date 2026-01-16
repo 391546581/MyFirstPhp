@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{$title|default='ThinkPHP 学习'}</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 2rem;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 16px;
+            padding: 2rem;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+        }
+
+        h1 {
+            color: #1a202c;
+            margin-bottom: 1.5rem;
+            border-bottom: 3px solid #667eea;
+            padding-bottom: 0.5rem;
+        }
+
+        h2 {
+            color: #4a5568;
+            margin: 1.5rem 0 1rem;
+        }
+
+        .user-card {
+            background: linear-gradient(135deg, #f6f9fc 0%, #edf2f7 100%);
+            border-radius: 8px;
+            padding: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .user-card p {
+            margin: 0.5rem 0;
+            color: #4a5568;
+        }
+
+        .user-card strong {
+            color: #2d3748;
+        }
+
+        ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        li {
+            background: #f7fafc;
+            margin: 0.5rem 0;
+            padding: 0.75rem 1rem;
+            border-radius: 6px;
+            border-left: 4px solid #667eea;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+            font-size: 0.875rem;
+            font-weight: 500;
+        }
+
+        .badge-primary {
+            background: #667eea;
+            color: white;
+        }
+
+        .badge-secondary {
+            background: #a0aec0;
+            color: white;
+        }
+
+        .code-block {
+            background: #2d3748;
+            color: #e2e8f0;
+            padding: 1rem;
+            border-radius: 8px;
+            overflow-x: auto;
+            font-family: 'Fira Code', monospace;
+        }
+
+        .footer {
+            margin-top: 2rem;
+            padding-top: 1rem;
+            border-top: 1px solid #e2e8f0;
+            color: #718096;
+            text-align: center;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>🎓 {$title}</h1>
+
+        <!-- 用户信息展示 -->
+        <h2>用户信息</h2>
+        <div class="user-card">
+            <p><strong>姓名：</strong>{$user.name}</p>
+            <p><strong>年龄：</strong>{$user.age} 岁</p>
+        </div>
+
+        <!-- 列表遍历 -->
+        <h2>学习内容</h2>
+        <ul>
+            {volist name="items" id="item" key="index"}
+            <li>
+                <span class="badge badge-primary">{$index}</span>
+                {$item}
+            </li>
+            {/volist}
+        </ul>
+
+        <!-- 条件判断 -->
+        <h2>状态判断</h2>
+        {if isset($status) && $status == 1}
+        <span class="badge badge-primary">状态正常</span>
+        {else}
+        <span class="badge badge-secondary">状态未知</span>
+        {/if}
+
+        <!-- 代码展示 -->
+        <h2>模板语法示例</h2>
+        <div class="code-block">
+            <pre>
+&lt;!-- 变量输出 --&gt;
+{literal}{$name}{/literal}
+{literal}{$user.name}{/literal}
+{literal}{$user['name']}{/literal}
+
+&lt;!-- 使用函数 --&gt;
+{literal}{$name|strtoupper}{/literal}
+{literal}{$birthday|date='Y-m-d'}{/literal}
+
+&lt;!-- 条件判断 --&gt;
+{literal}{if $status == 1}{/literal}
+    正常
+{literal}{else}{/literal}
+    异常
+{literal}{/if}{/literal}
+
+&lt;!-- 循环 --&gt;
+{literal}{foreach $users as $user}{/literal}
+    {literal}{$user.name}{/literal}
+{literal}{/foreach}{/literal}
+</pre>
+        </div>
+
+        <div class="footer">
+            <p>当前时间：{$Think.now|date='Y-m-d H:i:s'}</p>
+            <p>ThinkPHP 8.0 视图模板学习示例</p>
+        </div>
+    </div>
+</body>
+
+</html>

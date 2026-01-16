@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>用户管理</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .container { max-width: 1000px; margin: 0 auto; }
+        .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+        table { width: 100%; border-collapse: collapse; }
+        th, td { padding: 10px; text-align: left; border-bottom: 1px solid #ddd; }
+        th { background-color: #f2f2f2; }
+        .btn { padding: 5px 10px; margin: 2px; text-decoration: none; border-radius: 3px; }
+        .btn-primary { background-color: #007bff; color: white; }
+        .btn-warning { background-color: #ffc107; color: black; }
+        .btn-danger { background-color: #dc3545; color: white; }
+        .pagination { margin-top: 20px; text-align: center; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>用户管理</h1>
+            <a href="/user/create" class="btn btn-primary">新增用户</a>
+        </div>
+        
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>姓名</th>
+                    <th>邮箱</th>
+                    <th>电话</th>
+                    <th>年龄</th>
+                    <th>状态</th>
+                    <th>创建时间</th>
+                    <th>操作</th>
+                </tr>
+            </thead>
+            <tbody>
+                {volist name="users" id="user"}
+                <tr>
+                    <td>{$user.id}</td>
+                    <td>{$user.name}</td>
+                    <td>{$user.email}</td>
+                    <td>{$user.phone}</td>
+                    <td>{$user.age}</td>
+                    <td>{$user.status ? '正常' : '禁用'}</td>
+                    <td>{$user.create_time}</td>
+                    <td>
+                        <a href="/user/edit/{$user.id}" class="btn btn-warning">编辑</a>
+                        <a href="javascript:void(0)" onclick="deleteUser({$user.id})" class="btn btn-danger">删除</a>
+                    </td>
+                </tr>
+                {/volist}
+            </tbody>
+        </table>
+        
+        <div class="pagination">
+            {$users|raw}
+        </div>
+    </div>
+
+    <script>
+        function deleteUser(id) {
+            if (confirm('确定要删除该用户吗？')) {
+                fetch(`/user/delete/${id}`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    }
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.code === 1) {
+                        alert(data.msg);
+                        location.reload();
+                    } else {
+                        alert(data.msg);
+                    }
+                })
+                .catch(error => {
+                    alert('操作失败：' + error.message);
+                });
+            }
+        }
+    </script>
+</body>
+</html>

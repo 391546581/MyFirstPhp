@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>编辑用户</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .container { max-width: 600px; margin: 0 auto; }
+        .form-group { margin-bottom: 15px; }
+        label { display: inline-block; width: 100px; font-weight: bold; }
+        input, select { width: 300px; padding: 8px; border: 1px solid #ddd; border-radius: 3px; }
+        .btn { padding: 10px 20px; margin: 5px; text-decoration: none; border-radius: 3px; border: none; cursor: pointer; }
+        .btn-primary { background-color: #007bff; color: white; }
+        .btn-secondary { background-color: #6c757d; color: white; }
+        .error { color: red; font-size: 14px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>编辑用户</h1>
+        
+        <form id="userForm">
+            <div class="form-group">
+                <label>姓名：</label>
+                <input type="text" name="name" value="{$user.name}" required>
+            </div>
+            
+            <div class="form-group">
+                <label>邮箱：</label>
+                <input type="email" name="email" value="{$user.email}" required>
+            </div>
+            
+            <div class="form-group">
+                <label>电话：</label>
+                <input type="text" name="phone" value="{$user.phone}">
+            </div>
+            
+            <div class="form-group">
+                <label>年龄：</label>
+                <input type="number" name="age" value="{$user.age}" min="0" max="150">
+            </div>
+            
+            <div class="form-group">
+                <label>状态：</label>
+                <select name="status">
+                    <option value="1" {if $user.status == 1}selected{/if}>正常</option>
+                    <option value="0" {if $user.status == 0}selected{/if}>禁用</option>
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <button type="submit" class="btn btn-primary">更新</button>
+                <a href="/user" class="btn btn-secondary">返回</a>
+            </div>
+        </form>
+        
+        <div id="error-message" class="error"></div>
+    </div>
+
+    <script>
+        document.getElementById('userForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const formData = new FormData(this);
+            const data = Object.fromEntries(formData.entries());
+            
+            fetch('/user/update/{$user.id}', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(data)
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.code === 1) {
+                    alert(data.msg);
+                    location.href = '/user';
+                } else {
+                    document.getElementById('error-message').textContent = data.msg;
+                }
+            })
+            .catch(error => {
+                document.getElementById('error-message').textContent = '更新失败：' + error.message;
+            });
+        });
+    </script>
+</body>
+</html>
